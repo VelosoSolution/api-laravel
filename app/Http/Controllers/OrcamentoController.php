@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 class UserController extends Controller
 {
@@ -22,15 +23,19 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required','string'],
-            'password' => ['required', 'min:6', 'max:50']
+            'cliente' => ['required', 'string', 'max:255'],
+            'datahoraorcamento' => ['required','DateTime'],
+            'vendedor' => ['required', 'min:6', 'max:50'],
+            'descricao' => ['required', 'min:6', 'max:150'],
+            'valororcado' => ['required', 'decimal'  , 8,6]
         ]);
 
         $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password')
+            'cliente' => $request->input('cliente'),
+            'datahoraorcamento' => $request->input('datahoraorcamento'),
+            'vendedor' => $request->input('vendedor'),
+            'descricao' => $request->input('descricao'),
+            'valororcado' => $request->input('valororcado'),
         ]);
 
         return new UserResource($user);
@@ -52,9 +57,11 @@ class UserController extends Controller
     {
 
         $validated = $request->validate([
-            'name' => ['string', 'max:255'],
-            'email' => ['string'],
-            'password' => ['string','min:6', 'max:255'],
+            'cliente' => ['string', 'max:255'],
+            'datahoraorcamento' => ['datetime',now()],
+            'vendedor' => ['string','min:6', 'max:255'],
+            'descricao' => ['string', 'min:6', 'max:255'],
+            'valororcado' => ['decimal', 8,6]
         ]);
 
         $user->update($validated);
